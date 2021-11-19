@@ -26,7 +26,7 @@ class Person(BaseModel):
 class Role(BaseModel):
     person_id: constr(regex=r"[a-z-]+")
     company_id: constr(regex=r"[a-z-]+")
-    role: constr(regex=r"(co-founder)")
+    role: constr(regex=r"(founder|co-founder)")
 
 
 class Investor(BaseModel):
