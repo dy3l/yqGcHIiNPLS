@@ -47,10 +47,32 @@ class Investment(BaseModel):
     raised_date: date
 
 
+with open("data/companies.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f, delimiter=",")
+    companies = list(reader)
+
+
+with open("data/people.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f, delimiter=",")
+    people = list(reader)
+
+
+with open("data/roles.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f, delimiter=",")
+    roles = list(reader)
+
+
+with open("data/investments.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f, delimiter=",")
+    investments = list(reader)
+
+
+with open("data/investors.csv", "r", encoding="utf-8") as f:
+    reader = csv.DictReader(f, delimiter=",")
+    investors = list(reader)
+
+
 def test_companies():
-    with open("data/companies.csv", "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter=",")
-        companies = list(reader)
     for company in companies:
         Company(
             id=company["id"],
@@ -68,9 +90,6 @@ def test_companies():
 
 
 def test_people():
-    with open("data/people.csv", "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter=",")
-        people = list(reader)
     for person in people:
         Person(
             id=person["id"],
@@ -79,21 +98,17 @@ def test_people():
 
 
 def test_roles():
-    with open("data/roles.csv", "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter=",")
-        roles = list(reader)
     for role in roles:
         Role(
             person_id=role["person_id"],
             company_id=role["company_id"],
             role=role["role"],
         )
+        assert role["person_id"] in [person["id"] for person in people]
+        assert role["company_id"] in [company["id"] for company in companies]
 
 
 def test_investments():
-    with open("data/investments.csv", "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter=",")
-        investments = list(reader)
     for investment in investments:
         Investment(
             company_id=investment["company_id"],
@@ -103,12 +118,11 @@ def test_investments():
             type=investment["type"],
             raised_date=investment["raised_date"],
         )
+        assert investment["company_id"] in [company["id"] for company in companies]
+        assert investment["investor_id"] in [investor["id"] for investor in investors]
 
 
 def test_investors():
-    with open("data/investors.csv", "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter=",")
-        investors = list(reader)
     for investor in investors:
         Investor(
             id=investor["id"],
@@ -118,6 +132,7 @@ def test_investors():
             founded_date=investor["founded_date"],
             headquarters=investor["headquarters"],
         )
+
 
 test_companies()
 test_people()
